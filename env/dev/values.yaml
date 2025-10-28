@@ -1,4 +1,4 @@
 image:
-  tag: v0.0.83
+  tag: v0.0.89
 
 replicaCount: 1
