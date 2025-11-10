@@ -2,3 +2,15 @@ featureFlags:
   FEATURE_AAA: enabled
   FEATURE_BBB: enabled
   FEATURE_CCC: enabled
+  FEATURE_DDD: enabled
+  FEATURE_EEE: enabled
+  FEATURE_FFF: enabled
+  FEATURE_GGG: enabled
+  FEATURE_HHH: enabled
+  FEATURE_III: enabled
+  FEATURE_JJJ: enabled
+  FEATURE_KKK: enabled
+  FEATURE_LLL: enabled
+  FEATURE_MMM: enabled
+  FEATURE_NNN: enabled
+  FEATURE_OOO: enabled
