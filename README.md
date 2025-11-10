@@ -12,7 +12,7 @@ This is a GitOps repository of a Kargo Helm example for getting started.
 
 ## Requirements
 
-* Kargo v1.0.x (for older Kargo versions, switch to the release-X.Y branch)
+* Kargo v1.3 (for older Kargo versions, switch to the release-X.Y branch)
 * GitHub and a container registry (GHCR.io)
 * `git` and `docker` installed
 
@@ -115,3 +115,10 @@ docker buildx imagetools create \
 Then refresh the Warehouse in the UI to detect the new Freight.
 
 
+<<<<<<< Updated upstream
+=======
+## Promoting a feature
+
+Edit the `base/feature-flags.yaml` with a new setting. This will be detected
+by the `features` Warehouse as a promotable configuration.
+>>>>>>> Stashed changes

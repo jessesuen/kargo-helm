@@ -1,0 +1,4 @@
+image:
+  tag: v0.0.80
+
+replicaCount: 2

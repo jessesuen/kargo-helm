@@ -1,0 +1,47 @@
+apiVersion: kargo.akuity.io/v1alpha1
+kind: PromotionTask
+metadata:
+  name: promote
+  namespace: kargo-helm
+spec:
+  vars:
+  - name: image
+    value: ghcr.io/jessesuen/guestbook
+  - name: repoURL
+    value: https://github.com/jessesuen/kargo-helm.git
+  - name: branch
+    value: main
+
+  steps:
+  - uses: git-clone
+    config:
+      repoURL: ${{ vars.repoURL }}
+      checkout:
+      - commit: ${{ commitFrom( vars.repoURL ).ID }}
+        path: ./src
+      - branch: ${{ vars.branch }}
+        path: ./out
+  - uses: yaml-update
+    as: update-image
+    config:
+      path: ./out/env/${{ ctx.stage }}/values.yaml
+      updates:
+      - key: image.tag
+        value: ${{ imageFrom( vars.image ).Tag }}
+  - uses: copy
+    config:
+      inPath: ./src/base/feature-flags.yaml
+      outPath: ./out/env/${{ ctx.stage }}/feature-flags.yaml
+  - uses: git-commit
+    as: commit
+    config:
+      path: ./out
+      message: ${{ task.outputs['update-image'].commitMessage }}
+  - uses: git-push
+    config:
+      path: ./out
+  - uses: argocd-update
+    config:
+      apps:
+      - name: kargo-helm-${{ ctx.stage }}
+
