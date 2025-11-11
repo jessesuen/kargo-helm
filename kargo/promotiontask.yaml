@@ -17,26 +17,37 @@ spec:
     config:
       repoURL: ${{ vars.repoURL }}
       checkout:
-      - commit: ${{ commitFrom( vars.repoURL ).ID }}
-        path: ./src
       - branch: ${{ vars.branch }}
         path: ./out
-  - uses: yaml-update
+  - if: ${{ ctx.targetFreight.origin.name == "guestbook" }}
+    uses: yaml-update
     as: update-image
     config:
       path: ./out/env/${{ ctx.stage }}/values.yaml
       updates:
       - key: image.tag
         value: ${{ imageFrom( vars.image ).Tag }}
-  - uses: copy
+  - if: ${{ ctx.targetFreight.origin.name == "features" }}
+    uses: git-clone
     config:
-      inPath: ./src/base/feature-flags.yaml
+      repoURL: ${{ vars.repoURL }}
+      checkout:
+      - branch: ${{ commitFrom( vars.repoURL ).ID }}
+        path: ./features
+  - if: ${{ ctx.targetFreight.origin.name == "features" }}
+    uses: copy
+    config:
+      inPath: ./features/base/feature-flags.yaml
       outPath: ./out/env/${{ ctx.stage }}/feature-flags.yaml
   - uses: git-commit
     as: commit
     config:
       path: ./out
-      message: ${{ task.outputs['update-image'].commitMessage }}
+      message: "${{
+        ctx.targetFreight.origin.name == 'guestbook' ? 
+        'updated guestbook to '+imageFrom( vars.image ).Tag :
+        'updates features.yaml from '+commitFrom( vars.repoURL ).ID
+        }}"
   - uses: git-push
     config:
       path: ./out
@@ -44,4 +55,3 @@ spec:
     config:
       apps:
       - name: kargo-helm-${{ ctx.stage }}
-

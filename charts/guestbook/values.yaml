@@ -33,3 +33,6 @@ ingress:
 podAnnotations: {}
 
 resources: {}
+
+postSyncJob:
+  enabled: true
