@@ -1,0 +1,24 @@
+name: Reusable Greeting Workflow
+
+on:
+  workflow_call:
+    inputs:
+      greeting:
+        description: "The greeting message to display"
+        required: true
+        type: string
+
+  workflow_dispatch:
+    inputs:
+      greeting:
+        description: "The greeting message to display"
+        required: true
+        type: string
+        default: "Hello!"
+
+jobs:
+  greet:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Display Greeting
+        run: echo "${{ inputs.greeting }}"
